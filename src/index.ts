@@ -1,5 +1,12 @@
 export { VideoContext } from "./videocontext";
 
+export { GraphNode } from "./graphnode";
+
+export { CompositingNode } from "./ProcessingNodes/compositingnode";
+export { EffectNode } from "./ProcessingNodes/effectnode";
+export { ProcessingNode } from "./ProcessingNodes/processingnode";
+export { TransitionNode } from "./ProcessingNodes/transitionnode";
+
 export { AudioNode } from "./SourceNodes/audionode";
 export { CanvasNode } from "./SourceNodes/canvasnode";
 export { ImageNode } from "./SourceNodes/imagenode";
