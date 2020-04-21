@@ -1,7 +1,7 @@
 import vertexShader from "./colorThreshold.vert";
 import fragmentShader from "./colorThreshold.frag";
 
-let colorThreshold = {
+export const COLOR_THRESHOLD = {
     title: "Color Threshold",
     description: "Turns all pixels with a greater value than the specified threshold transparent.",
     vertexShader,
@@ -12,5 +12,3 @@ let colorThreshold = {
     },
     inputs: ["u_image"]
 };
-
-export default colorThreshold;

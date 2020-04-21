@@ -1,7 +1,7 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import SourceNode, { SOURCENODESTATE } from "./sourcenode";
+import { SourceNode, SOURCENODESTATE } from "./sourcenode";
 
-class MediaNode extends SourceNode {
+export class MediaNode extends SourceNode {
     /**
      * Initialise an instance of a MediaNode.
      * This should not be called directly, but extended by other Node Types which use a `HTMLMediaElement`.
@@ -287,5 +287,3 @@ class MediaNode extends SourceNode {
         super.destroy();
     }
 }
-
-export default MediaNode;

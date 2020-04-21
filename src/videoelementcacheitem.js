@@ -8,7 +8,7 @@ import { SOURCENODESTATE } from "./SourceNodes/sourcenode";
  * playback has completed the `MediaNode` association will be removed
  * and potentially replaced with another.
  */
-class VideoElementCacheItem {
+export class VideoElementCacheItem {
     constructor(node = null) {
         this._element = this._createElement();
         this._node = node;
@@ -42,5 +42,3 @@ class VideoElementCacheItem {
         return this._node && this._node._state === SOURCENODESTATE.playing;
     }
 }
-
-export default VideoElementCacheItem;

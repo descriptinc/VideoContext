@@ -1,5 +1,5 @@
 import * as utils from "../../src/utils";
-import SourceNode from "../../src/SourceNodes/sourcenode";
+import { SourceNode } from "../../src/SourceNodes/sourcenode";
 import sinon from "sinon";
 import "webgl-mock";
 

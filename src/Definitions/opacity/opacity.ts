@@ -1,7 +1,7 @@
 import vertexShader from "./opacity.vert";
 import fragmentShader from "./opacity.frag";
 
-const opacity = {
+export const OPACITY = {
     title: "Opacity",
     description: "Sets the opacity of an input.",
     vertexShader,
@@ -11,5 +11,3 @@ const opacity = {
     },
     inputs: ["u_image"]
 };
-
-export default opacity;

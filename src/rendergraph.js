@@ -1,7 +1,7 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import { ConnectException } from "./exceptions.js";
+import { ConnectException } from "./exceptions";
 
-class RenderGraph {
+export class RenderGraph {
     /**
      * Manages the rendering graph.
      */
@@ -239,5 +239,3 @@ class RenderGraph {
         return inputLess;
     }
 }
-
-export default RenderGraph;

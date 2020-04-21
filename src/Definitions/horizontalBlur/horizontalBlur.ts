@@ -1,7 +1,7 @@
 import vertexShader from "./horizontalBlur.vert";
 import fragmentShader from "./horizontalBlur.frag";
 
-let horizontal_blur = {
+export const HORIZONTAL_BLUR = {
     title: "Horizontal Blur",
     description:
         "A horizontal blur effect. Adpated from http://xissburg.com/faster-gaussian-blur-in-glsl/",
@@ -12,5 +12,3 @@ let horizontal_blur = {
     },
     inputs: ["u_image"]
 };
-
-export default horizontal_blur;

@@ -1,7 +1,7 @@
 import vertexShader from "./aaf_video_flip.vert";
 import fragmentShader from "./aaf_video_flip.frag";
 
-let aaf_video_flip = {
+export const AAF_VIDEO_FLIP = {
     title: "AAF Video Flip Effect",
     description: "A flip effect based on the AAF spec. Mirrors the image in the x-axis",
     vertexShader,
@@ -9,5 +9,3 @@ let aaf_video_flip = {
     properties: {},
     inputs: ["u_image"]
 };
-
-export default aaf_video_flip;

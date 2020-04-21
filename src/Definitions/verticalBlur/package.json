@@ -2,5 +2,5 @@
     "name": "verticalBlur",
     "version": "0.0.0",
     "private": true,
-    "main": "./verticalBlur.js"
+    "main": "verticalBlur.ts"
 }

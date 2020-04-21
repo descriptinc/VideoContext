@@ -1,8 +1,8 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import SourceNode, { SOURCENODESTATE } from "./sourcenode";
+import { SourceNode, SOURCENODESTATE } from "./sourcenode";
 
-const TYPE = "CanvasNode";
-class ImageNode extends SourceNode {
+export const IMAGETYPE = "CanvasNode";
+export class ImageNode extends SourceNode {
     /**
      * Initialise an instance of an ImageNode.
      * This should not be called directly, but created through a call to videoContext.createImageNode();
@@ -12,7 +12,7 @@ class ImageNode extends SourceNode {
         this._preloadTime = preloadTime;
         this._attributes = attributes;
         this._textureUploaded = false;
-        this._displayName = TYPE;
+        this._displayName = IMAGETYPE;
     }
 
     get elementURL() {
@@ -118,7 +118,3 @@ class ImageNode extends SourceNode {
         }
     }
 }
-
-export { TYPE as IMAGETYPE };
-
-export default ImageNode;

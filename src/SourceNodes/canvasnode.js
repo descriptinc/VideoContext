@@ -1,8 +1,8 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import SourceNode, { SOURCENODESTATE } from "./sourcenode";
+import { SourceNode, SOURCENODESTATE } from "./sourcenode";
 
-const TYPE = "CanvasNode";
-class CanvasNode extends SourceNode {
+export const CANVASTYPE = "CanvasNode";
+export class CanvasNode extends SourceNode {
     /**
      * Initialise an instance of a CanvasNode.
      * This should not be called directly, but created through a call to videoContext.createCanvasNode();
@@ -10,7 +10,7 @@ class CanvasNode extends SourceNode {
     constructor(canvas, gl, renderGraph, currentTime, preloadTime = 4) {
         super(canvas, gl, renderGraph, currentTime);
         this._preloadTime = preloadTime;
-        this._displayName = TYPE;
+        this._displayName = CANVASTYPE;
     }
 
     _load() {
@@ -58,7 +58,3 @@ class CanvasNode extends SourceNode {
         }
     }
 }
-
-export { TYPE as CANVASTYPE };
-
-export default CanvasNode;

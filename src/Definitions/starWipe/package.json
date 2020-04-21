@@ -2,5 +2,5 @@
     "name": "starWipe",
     "version": "0.0.0",
     "private": true,
-    "main": "./starWipe.js"
+    "main": "starWipe.ts"
 }

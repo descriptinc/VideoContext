@@ -1,7 +1,7 @@
 import vertexShader from "./crop.vert";
 import fragmentShader from "./crop.frag";
 
-let crop = {
+export const CROP = {
     title: "Primer Simple Crop",
     description: "A simple crop processors for primer",
     vertexShader,
@@ -14,5 +14,3 @@ let crop = {
     },
     inputs: ["u_image"]
 };
-
-export default crop;

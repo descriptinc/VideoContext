@@ -1,15 +1,15 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import MediaNode from "./medianode";
+import { MediaNode } from "./medianode";
 
-const TYPE = "AudioNode";
-class AudioNode extends MediaNode {
+export const AUDIOTYPE = "AudioNode";
+export class AudioNode extends MediaNode {
     /**
      * Initialise an instance of an AudioNode.
      * This should not be called directly, but created through a call to videoContext.audio();
      */
     constructor() {
         super(...arguments);
-        this._displayName = TYPE;
+        this._displayName = AUDIOTYPE;
         this._elementType = "audio";
     }
 
@@ -17,7 +17,3 @@ class AudioNode extends MediaNode {
         super._update(currentTime, false);
     }
 }
-
-export { TYPE as AUDIOTYPE };
-
-export default AudioNode;

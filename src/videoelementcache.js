@@ -1,7 +1,7 @@
-import VideoElementCacheItem from "./videoelementcacheitem";
+import { VideoElementCacheItem } from "./videoelementcacheitem";
 import { mediaElementHasSource } from "./utils";
 
-class VideoElementCache {
+export class VideoElementCache {
     constructor(cache_size = 3) {
         this._cacheItems = [];
         this._cacheItemsInitialised = false;
@@ -87,5 +87,3 @@ class VideoElementCache {
         return count;
     }
 }
-
-export default VideoElementCache;
