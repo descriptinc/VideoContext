@@ -1,16 +1,11 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import GraphNode from "../graphnode";
-import {
-    compileShader,
-    createShaderProgram,
-    createElementTexture,
-    updateTexture
-} from "../utils.js";
-import { RenderException } from "../exceptions.js";
+import { GraphNode } from "../graphnode";
+import { compileShader, createShaderProgram, createElementTexture, updateTexture } from "../utils";
+import { RenderException } from "../exceptions";
 
-const TYPE = "ProcessingNode";
+export const PROCESSINGTYPE = "ProcessingNode";
 
-class ProcessingNode extends GraphNode {
+export class ProcessingNode extends GraphNode {
     /**
      * Initialise an instance of a ProcessingNode.
      *
@@ -136,7 +131,7 @@ class ProcessingNode extends GraphNode {
         let texCoordLocation = gl.getAttribLocation(this._program, "a_texCoord");
         gl.enableVertexAttribArray(texCoordLocation);
         gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
-        this._displayName = TYPE;
+        this._displayName = PROCESSINGTYPE;
     }
 
     /**
@@ -256,7 +251,3 @@ class ProcessingNode extends GraphNode {
         }
     }
 }
-
-export { TYPE as PROCESSINGTYPE };
-
-export default ProcessingNode;

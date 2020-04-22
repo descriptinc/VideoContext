@@ -1,10 +1,10 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import ProcessingNode from "./processingnode";
-import { createElementTexture } from "../utils.js";
+import { ProcessingNode } from "./processingnode";
+import { createElementTexture } from "../utils";
 
-const TYPE = "CompositingNode";
+export const COMPOSITINGTYPE = "CompositingNode";
 
-class CompositingNode extends ProcessingNode {
+export class CompositingNode extends ProcessingNode {
     /**
      * Initialise an instance of a Compositing Node. You should not instantiate this directly, but use VideoContest.createCompositingNode().
      */
@@ -23,7 +23,7 @@ class CompositingNode extends ProcessingNode {
         );
         super(gl, renderGraph, definition, definition.inputs, false);
         this._placeholderTexture = placeholderTexture;
-        this._displayName = TYPE;
+        this._displayName = COMPOSITINGTYPE;
     }
 
     _render() {
@@ -59,7 +59,3 @@ class CompositingNode extends ProcessingNode {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 }
-
-export { TYPE as COMPOSITINGTYPE };
-
-export default CompositingNode;

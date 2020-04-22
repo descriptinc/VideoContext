@@ -2,5 +2,5 @@
     "name": "staticEffect",
     "version": "0.0.0",
     "private": true,
-    "main": "./staticEffect.js"
+    "main": "staticEffect.ts"
 }

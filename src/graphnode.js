@@ -1,8 +1,8 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
 
-const TYPE = "GraphNode";
+export const GRAPHTYPE = "GraphNode";
 
-class GraphNode {
+export class GraphNode {
     /**
      * Base class from which all processing and source nodes are derrived.
      */
@@ -16,7 +16,7 @@ class GraphNode {
         this._gl = gl;
         this._renderGraph = renderGraph;
         this._rendered = false;
-        this._displayName = TYPE;
+        this._displayName = GRAPHTYPE;
     }
 
     /**
@@ -118,7 +118,3 @@ class GraphNode {
         this._destroyed = true;
     }
 }
-
-export { TYPE as GRAPHTYPE };
-
-export default GraphNode;

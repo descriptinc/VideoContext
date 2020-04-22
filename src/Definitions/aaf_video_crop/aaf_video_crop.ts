@@ -1,7 +1,7 @@
 import vertexShader from "./aaf_video_crop.vert";
 import fragmentShader from "./aaf_video_crop.frag";
 
-let aaf_video_crop = {
+export const AAF_VIDEO_CROP = {
     title: "AAF Video Crop Effect",
     description: "A crop effect based on the AAF spec.",
     vertexShader,
@@ -14,5 +14,3 @@ let aaf_video_crop = {
     },
     inputs: ["u_image"]
 };
-
-export default aaf_video_crop;

@@ -1,7 +1,7 @@
 import vertexShader from "./crossfade.vert";
 import fragmentShader from "./crossfade.frag";
 
-let crossfade = {
+export const CROSSFADE = {
     title: "Cross-Fade",
     description: "A cross-fade effect. Typically used as a transistion.",
     vertexShader,
@@ -11,5 +11,3 @@ let crossfade = {
     },
     inputs: ["u_image_a", "u_image_b"]
 };
-
-export default crossfade;

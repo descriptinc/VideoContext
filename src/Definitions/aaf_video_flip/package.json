@@ -2,5 +2,5 @@
     "name": "aaf_video_flip",
     "version": "0.0.0",
     "private": true,
-    "main": "./aaf_video_flip.js"
+    "main": "aaf_video_flip.ts"
 }

@@ -1,7 +1,7 @@
-import VideoElementCacheItem from "./videoelementcacheitem";
+import { VideoElementCacheItem } from "./videoelementcacheitem";
 import { mediaElementHasSource } from "./utils";
 
-class VideoElementCache {
+export class VideoElementCache {
     constructor(cache_size = 3) {
         this._cacheItems = [];
         this._cacheItemsInitialised = false;
@@ -12,26 +12,27 @@ class VideoElementCache {
     }
 
     init() {
-        if (!this._cacheItemsInitialised) {
-            for (let cacheItem of this._cacheItems) {
-                try {
-                    cacheItem.element.play().then(
-                        () => {
-                            // Pause any elements not in the "playing" state
-                            if (!cacheItem.isPlaying()) {
-                                cacheItem.element.pause();
-                            }
-                        },
-                        e => {
-                            if (e.name !== "NotSupportedError") throw e;
-                        }
-                    );
-                } catch (e) {
-                    //console.log(e.name);
-                }
-            }
-        }
-        this._cacheItemsInitialised = true;
+        // if (!this._cacheItemsInitialised) {
+        //     for (let cacheItem of this._cacheItems) {
+        //         try {
+        //             console.log("videoelementcache.js: cacheItem.element.play().then(");
+        //             cacheItem.element
+        //                 .play()
+        //                 .then(() => {
+        //                     // Pause any elements not in the "playing" state
+        //                     if (!cacheItem.isPlaying()) {
+        //                         cacheItem.element.pause();
+        //                     }
+        //                 })
+        //                 .catch(e => {
+        //                     if (e.name !== "NotSupportedError") throw e;
+        //                 });
+        //         } catch (e) {
+        //             //console.log(e.name);
+        //         }
+        //     }
+        // }
+        // this._cacheItemsInitialised = true;
     }
 
     /**
@@ -87,5 +88,3 @@ class VideoElementCache {
         return count;
     }
 }
-
-export default VideoElementCache;

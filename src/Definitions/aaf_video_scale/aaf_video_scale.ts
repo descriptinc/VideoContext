@@ -1,7 +1,7 @@
 import vertexShader from "./aaf_video_scale.vert";
 import fragmentShader from "./aaf_video_scale.frag";
 
-let aaf_video_scale = {
+export const AAF_VIDEO_SCALE = {
     title: "AAF Video Scale Effect",
     description: "A scale effect based on the AAF spec.",
     vertexShader,
@@ -12,5 +12,3 @@ let aaf_video_scale = {
     },
     inputs: ["u_image"]
 };
-
-export default aaf_video_scale;

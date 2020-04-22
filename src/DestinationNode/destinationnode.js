@@ -1,11 +1,11 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import ProcessingNode from "../ProcessingNodes/processingnode";
+import { ProcessingNode } from "../ProcessingNodes/processingnode";
 import fragmentShader from "./destinationnode.frag";
 import vertexShader from "./destinationnode.vert";
 
-const TYPE = "DestinationNode";
+export const DESTINATIONTYPE = "DestinationNode";
 
-class DestinationNode extends ProcessingNode {
+export class DestinationNode extends ProcessingNode {
     /**
      * Initialise an instance of a DestinationNode.
      *
@@ -22,7 +22,7 @@ class DestinationNode extends ProcessingNode {
         };
 
         super(gl, renderGraph, definition, definition.inputs, false);
-        this._displayName = TYPE;
+        this._displayName = DESTINATIONTYPE;
     }
 
     _render() {
@@ -49,7 +49,3 @@ class DestinationNode extends ProcessingNode {
         });
     }
 }
-
-export { TYPE as DESTINATIONTYPE };
-
-export default DestinationNode;

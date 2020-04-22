@@ -1,8 +1,8 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
-import { updateTexture, clearTexture, createElementTexture } from "../utils.js";
-import GraphNode from "../graphnode";
+import { updateTexture, clearTexture, createElementTexture } from "../utils";
+import { GraphNode } from "../graphnode";
 
-let STATE = {
+export const SOURCENODESTATE = {
     waiting: 0,
     sequenced: 1,
     playing: 2,
@@ -11,15 +11,19 @@ let STATE = {
     error: 5
 };
 
-const TYPE = "SourceNode";
+export const SOURCETYPE = "SourceNode";
 
-class SourceNode extends GraphNode {
+export class SourceNode extends GraphNode {
     /**
      * Initialise an instance of a SourceNode.
      * This is the base class for other Nodes which generate media to be passed into the processing pipeline.
      */
     constructor(src, gl, renderGraph, currentTime) {
         super(gl, renderGraph, [], true);
+        /**
+         * @type {HTMLMediaElement | undefined}
+         * @private
+         */
         this._element = undefined;
         this._elementURL = undefined;
         this._isResponsibleForElementLifeCycle = true;
@@ -36,7 +40,7 @@ class SourceNode extends GraphNode {
             this._isResponsibleForElementLifeCycle = false;
         }
 
-        this._state = STATE.waiting;
+        this._state = SOURCENODESTATE.waiting;
         this._currentTime = currentTime;
         this._startTime = NaN;
         this._stopTime = Infinity;
@@ -57,7 +61,7 @@ class SourceNode extends GraphNode {
         );
         this._callbacks = [];
         this._renderPaused = false;
-        this._displayName = TYPE;
+        this._displayName = SOURCETYPE;
     }
 
     /**
@@ -221,13 +225,13 @@ class SourceNode extends GraphNode {
      * @return {boolean} Will return true is seqeuncing has succeded, or false if it is already sequenced.
      */
     start(time) {
-        if (this._state !== STATE.waiting) {
+        if (this._state !== SOURCENODESTATE.waiting) {
             console.debug("SourceNode is has already been sequenced. Can't sequence twice.");
             return false;
         }
 
         this._startTime = this._currentTime + time;
-        this._state = STATE.sequenced;
+        this._state = SOURCENODESTATE.sequenced;
         return true;
     }
 
@@ -238,12 +242,12 @@ class SourceNode extends GraphNode {
      * @return {boolean} Will return true is seqeuncing has succeded, or false if it is already sequenced.
      */
     startAt(time) {
-        if (this._state !== STATE.waiting) {
+        if (this._state !== SOURCENODESTATE.waiting) {
             console.debug("SourceNode is has already been sequenced. Can't sequence twice.");
             return false;
         }
         this._startTime = time;
-        this._state = STATE.sequenced;
+        this._state = SOURCENODESTATE.sequenced;
         return true;
     }
 
@@ -258,10 +262,10 @@ class SourceNode extends GraphNode {
      * @return {boolean} Will return true is seqeuncing has succeded, or false if the playback has already ended or if start hasn't been called yet, or if time is less than the start time.
      */
     stop(time) {
-        if (this._state === STATE.ended) {
+        if (this._state === SOURCENODESTATE.ended) {
             console.debug("SourceNode has already ended. Cannot call stop.");
             return false;
-        } else if (this._state === STATE.waiting) {
+        } else if (this._state === SOURCENODESTATE.waiting) {
             console.debug("SourceNode must have start called before stop is called");
             return false;
         }
@@ -282,10 +286,10 @@ class SourceNode extends GraphNode {
      * @return {boolean} Will return true is seqeuncing has succeded, or false if the playback has already ended or if start hasn't been called yet, or if time is less than the start time.
      */
     stopAt(time) {
-        if (this._state === STATE.ended) {
+        if (this._state === SOURCENODESTATE.ended) {
             console.debug("SourceNode has already ended. Cannot call stop.");
             return false;
-        } else if (this._state === STATE.waiting) {
+        } else if (this._state === SOURCENODESTATE.waiting) {
             console.debug("SourceNode must have start called before stop is called");
             return false;
         }
@@ -308,34 +312,37 @@ class SourceNode extends GraphNode {
 
         this._triggerCallbacks("seek", time);
 
-        if (this._state === STATE.waiting) return;
+        if (this._state === SOURCENODESTATE.waiting) return;
         if (time < this._startTime) {
             clearTexture(this._gl, this._texture);
-            this._state = STATE.sequenced;
+            this._state = SOURCENODESTATE.sequenced;
         }
-        if (time >= this._startTime && this._state !== STATE.paused) {
-            this._state = STATE.playing;
+        if (time >= this._startTime && this._state !== SOURCENODESTATE.paused) {
+            this._state = SOURCENODESTATE.playing;
         }
         if (time >= this._stopTime) {
             clearTexture(this._gl, this._texture);
             this._triggerCallbacks("ended");
-            this._state = STATE.ended;
+            this._state = SOURCENODESTATE.ended;
         }
         //update the current time
         this._currentTime = time;
     }
 
     _pause() {
-        if (this._state === STATE.playing || (this._currentTime === 0 && this._startTime === 0)) {
+        if (
+            this._state === SOURCENODESTATE.playing ||
+            (this._currentTime === 0 && this._startTime === 0)
+        ) {
             this._triggerCallbacks("pause");
-            this._state = STATE.paused;
+            this._state = SOURCENODESTATE.paused;
             this._renderPaused = false;
         }
     }
     _play() {
-        if (this._state === STATE.paused) {
+        if (this._state === SOURCENODESTATE.paused) {
             this._triggerCallbacks("play");
-            this._state = STATE.playing;
+            this._state = SOURCENODESTATE.playing;
         }
     }
 
@@ -344,9 +351,9 @@ class SourceNode extends GraphNode {
             return false;
         }
         if (
-            this._state === STATE.playing ||
-            this._state === STATE.paused ||
-            this._state === STATE.error
+            this._state === SOURCENODESTATE.playing ||
+            this._state === SOURCENODESTATE.paused ||
+            this._state === SOURCENODESTATE.error
         ) {
             return this._ready;
         }
@@ -362,9 +369,9 @@ class SourceNode extends GraphNode {
 
         //update the state
         if (
-            this._state === STATE.waiting ||
-            this._state === STATE.ended ||
-            this._state === STATE.error
+            this._state === SOURCENODESTATE.waiting ||
+            this._state === SOURCENODESTATE.ended ||
+            this._state === SOURCENODESTATE.error
         )
             return false;
 
@@ -372,32 +379,32 @@ class SourceNode extends GraphNode {
 
         if (currentTime < this._startTime) {
             clearTexture(this._gl, this._texture);
-            this._state = STATE.sequenced;
+            this._state = SOURCENODESTATE.sequenced;
         }
 
         if (
             currentTime >= this._startTime &&
-            this._state !== STATE.paused &&
-            this._state !== STATE.error
+            this._state !== SOURCENODESTATE.paused &&
+            this._state !== SOURCENODESTATE.error
         ) {
-            if (this._state !== STATE.playing) this._triggerCallbacks("play");
-            this._state = STATE.playing;
+            if (this._state !== SOURCENODESTATE.playing) this._triggerCallbacks("play");
+            this._state = SOURCENODESTATE.playing;
         }
 
         if (currentTime >= this._stopTime) {
             clearTexture(this._gl, this._texture);
             this._triggerCallbacks("ended");
-            this._state = STATE.ended;
+            this._state = SOURCENODESTATE.ended;
         }
 
         //update this source nodes texture
         if (this._element === undefined || this._ready === false) return true;
 
-        if (!this._renderPaused && this._state === STATE.paused) {
+        if (!this._renderPaused && this._state === SOURCENODESTATE.paused) {
             if (triggerTextureUpdate) updateTexture(this._gl, this._texture, this._element);
             this._renderPaused = true;
         }
-        if (this._state === STATE.playing) {
+        if (this._state === SOURCENODESTATE.playing) {
             if (triggerTextureUpdate) updateTexture(this._gl, this._texture, this._element);
             if (this._stretchPaused) {
                 this._stopTime += timeDelta;
@@ -413,7 +420,7 @@ class SourceNode extends GraphNode {
     clearTimelineState() {
         this._startTime = NaN;
         this._stopTime = Infinity;
-        this._state = STATE.waiting;
+        this._state = SOURCENODESTATE.waiting;
     }
 
     /**
@@ -425,7 +432,7 @@ class SourceNode extends GraphNode {
         this.unregisterCallback();
         delete this._element;
         this._elementURL = undefined;
-        this._state = STATE.waiting;
+        this._state = SOURCENODESTATE.waiting;
         this._currentTime = 0;
         this._startTime = NaN;
         this._stopTime = Infinity;
@@ -435,8 +442,3 @@ class SourceNode extends GraphNode {
         this._texture = undefined;
     }
 }
-
-export { STATE as SOURCENODESTATE };
-export { TYPE as SOURCETYPE };
-
-export default SourceNode;

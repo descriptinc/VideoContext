@@ -1,7 +1,7 @@
 import vertexShader from "./aaf_video_position.vert";
 import fragmentShader from "./aaf_video_position.frag";
 
-let aaf_video_position = {
+export const AAF_VIDEO_POSITION = {
     title: "AAF Video Position Effect",
     description: "A position effect based on the AAF spec.",
     vertexShader,
@@ -12,5 +12,3 @@ let aaf_video_position = {
     },
     inputs: ["u_image"]
 };
-
-export default aaf_video_position;
