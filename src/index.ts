@@ -1,4 +1,4 @@
-export { VideoContext } from "./videocontext";
+export { VideoContext, updateablesManager } from "./videocontext";
 
 export { GraphNode } from "./graphnode";
 

@@ -1,5 +1,6 @@
 //Matthew Shotton, R&D User Experience,© BBC 2015
 import { SourceNode, SOURCENODESTATE } from "./sourcenode";
+import { computePlaybackRateToSync } from "../sync";
 
 export class MediaNode extends SourceNode {
     /**
@@ -30,6 +31,7 @@ export class MediaNode extends SourceNode {
         if (this._attributes.loop) {
             this._loopElement = this._attributes.loop;
         }
+        this._promise = undefined;
     }
 
     set playbackRate(playbackRate) {
@@ -44,7 +46,12 @@ export class MediaNode extends SourceNode {
                 this._element.pause();
             } else {
                 if (this._state === SOURCENODESTATE.playing) {
-                    this._element.play();
+                    console.log(
+                        "medianode.js: this._state === SOURCENODESTATE.playing this._element.play()"
+                    );
+                    this._element.play().catch(error => {
+                        console.log("play interrupted", error);
+                    });
                 }
             }
         }
@@ -97,6 +104,7 @@ export class MediaNode extends SourceNode {
                 this._playbackRateUpdated = true;
             }
             this._element.volume = this._attributes.volume;
+            console.log("setting element url");
             if (window.MediaStream !== undefined && this._elementURL instanceof MediaStream) {
                 this._element.srcObject = this._elementURL;
             } else {
@@ -196,6 +204,7 @@ export class MediaNode extends SourceNode {
         if (this._isResponsibleForElementLifeCycle && this._element !== undefined) {
             this._element.removeAttribute("src");
             this._element.srcObject = undefined;
+            console.log(`medianode element.load()`);
             this._element.load();
             for (let key in this._attributes) {
                 this._element.removeAttribute(key);
@@ -244,16 +253,36 @@ export class MediaNode extends SourceNode {
             this._startTime - this._currentTime <= this._preloadTime &&
             this._state !== SOURCENODESTATE.waiting &&
             this._state !== SOURCENODESTATE.ended
-        )
+        ) {
             this._load();
+        }
+
+        if (this._element === undefined) {
+            return;
+        }
 
         if (this._state === SOURCENODESTATE.playing) {
             if (this._playbackRateUpdated) {
                 this._element.playbackRate = this._globalPlaybackRate * this._playbackRate;
                 this._playbackRateUpdated = false;
             }
+
+            // const currentTimeOffset =
+            //     this._currentTime > this._startTime ? this._currentTime - this._startTime : 0;
+            // const targetTime = this._sourceOffset + currentTimeOffset;
+            // this._element.playbackRate = computePlaybackRateToSync(
+            //     this._element.currentTime,
+            //     targetTime,
+            //     this._globalPlaybackRate * this._playbackRate,
+            //     // This number was hand-tweaked to get the synchronization to look good, but probably needs more work
+            //     -0.2
+            // );
+
             if (!this._isElementPlaying) {
-                this._element.play();
+                console.log("medianode.js: this._element.play()");
+                this._element.play().catch(error => {
+                    console.log("play interrupted", error);
+                });
                 if (this._stretchPaused) {
                     this._element.pause();
                 }
@@ -264,7 +293,7 @@ export class MediaNode extends SourceNode {
             this._element.pause();
             this._isElementPlaying = false;
             return true;
-        } else if (this._state === SOURCENODESTATE.ended && this._element !== undefined) {
+        } else if (this._state === SOURCENODESTATE.ended) {
             this._element.pause();
             if (this._isElementPlaying) {
                 this._unload();

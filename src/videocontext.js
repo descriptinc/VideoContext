@@ -12,8 +12,9 @@ import { TransitionNode } from "./ProcessingNodes/transitionnode";
 import { RenderGraph } from "./rendergraph";
 import { VideoElementCache } from "./videoelementcache";
 import { snapshot } from "./snapshot";
+import { EVENTS, STATE } from "./constants";
 
-let updateablesManager = new UpdateablesManager();
+export const updateablesManager = new UpdateablesManager();
 
 /**
  * VideoContext.
@@ -103,16 +104,14 @@ export class VideoContext {
         this._processingNodes = [];
         this._timeline = [];
         this._currentTime = 0;
-        this._state = VideoContext.STATE.PAUSED;
+        this._state = STATE.PAUSED;
         this._playbackRate = 1.0;
         this._volume = 1.0;
         this._sourcesPlaying = undefined;
         this._destinationNode = new DestinationNode(this._gl, this._renderGraph);
 
         this._callbacks = new Map();
-        Object.keys(VideoContext.EVENTS).forEach(name =>
-            this._callbacks.set(VideoContext.EVENTS[name], [])
-        );
+        Object.keys(EVENTS).forEach(name => this._callbacks.set(EVENTS[name], []));
 
         this._timelineCallbacks = [];
 
@@ -172,7 +171,7 @@ export class VideoContext {
     }
 
     /**
-     * Register a callback to listen to one of the events defined in `VideoContext.EVENTS`
+     * Register a callback to listen to one of the events defined in `EVENTS`
      *
      * @param {String} type - the event to register against.
      * @param {Function} func - the callback to register.
@@ -180,9 +179,9 @@ export class VideoContext {
      * @example
      * var canvasElement = document.getElementById("canvas");
      * var ctx = new VideoContext(canvasElement);
-     * ctx.registerCallback(VideoContext.EVENTS.STALLED, () => console.log("Playback stalled"));
-     * ctx.registerCallback(VideoContext.EVENTS.UPDATE, () => console.log("new frame"));
-     * ctx.registerCallback(VideoContext.EVENTS.ENDED, () => console.log("Playback ended"));
+     * ctx.registerCallback(EVENTS.STALLED, () => console.log("Playback stalled"));
+     * ctx.registerCallback(EVENTS.UPDATE, () => console.log("new frame"));
+     * ctx.registerCallback(EVENTS.ENDED, () => console.log("Playback ended"));
      */
     registerCallback(type, func) {
         if (!this._callbacks.has(type)) return false;
@@ -202,7 +201,7 @@ export class VideoContext {
      * var updateCallback = () => console.log("new frame");
      *
      * //register the callback
-     * ctx.registerCallback(VideoContext.EVENTS.UPDATE, updateCallback);
+     * ctx.registerCallback(EVENTS.UPDATE, updateCallback);
      * //then unregister it
      * ctx.unregisterCallback(updateCallback);
      *
@@ -262,8 +261,7 @@ export class VideoContext {
      *
      */
     set currentTime(currentTime) {
-        if (currentTime < this.duration && this._state === VideoContext.STATE.ENDED)
-            this._state = VideoContext.STATE.PAUSED;
+        if (currentTime < this.duration && this._state === STATE.ENDED) this._state = STATE.PAUSED;
 
         if (typeof currentTime === "string" || currentTime instanceof String) {
             currentTime = parseFloat(currentTime);
@@ -424,7 +422,7 @@ export class VideoContext {
         //Initialise the video element cache
         if (this._videoElementCache) this._videoElementCache.init();
         // set the state.
-        this._state = VideoContext.STATE.PLAYING;
+        this._state = STATE.PLAYING;
         return true;
     }
 
@@ -443,7 +441,7 @@ export class VideoContext {
      */
     pause() {
         console.debug("VideoContext - pausing");
-        this._state = VideoContext.STATE.PAUSED;
+        this._state = STATE.PAUSED;
         return true;
     }
 
@@ -834,22 +832,22 @@ export class VideoContext {
         });
 
         if (
-            this._state === VideoContext.STATE.PLAYING ||
-            this._state === VideoContext.STATE.STALLED ||
-            this._state === VideoContext.STATE.PAUSED
+            this._state === STATE.PLAYING ||
+            this._state === STATE.STALLED ||
+            this._state === STATE.PAUSED
         ) {
-            this._callCallbacks(VideoContext.EVENTS.UPDATE);
+            this._callCallbacks(EVENTS.UPDATE);
 
-            if (this._state !== VideoContext.STATE.PAUSED) {
+            if (this._state !== STATE.PAUSED) {
                 if (this._isStalled()) {
-                    this._callCallbacks(VideoContext.EVENTS.STALLED);
-                    this._state = VideoContext.STATE.STALLED;
+                    this._callCallbacks(EVENTS.STALLED);
+                    this._state = STATE.STALLED;
                 } else {
-                    this._state = VideoContext.STATE.PLAYING;
+                    this._state = STATE.PLAYING;
                 }
             }
 
-            if (this._state === VideoContext.STATE.PLAYING) {
+            if (this._state === STATE.PLAYING) {
                 //Handle timeline callbacks.
                 let activeCallbacks = new Map();
                 for (let callback of this._timelineCallbacks) {
@@ -886,8 +884,8 @@ export class VideoContext {
                     for (let i = 0; i < this._sourceNodes.length; i++) {
                         this._sourceNodes[i]._update(this._currentTime);
                     }
-                    this._state = VideoContext.STATE.ENDED;
-                    this._callCallbacks(VideoContext.EVENTS.ENDED);
+                    this._state = STATE.ENDED;
+                    this._callCallbacks(EVENTS.ENDED);
                 }
             }
 
@@ -896,14 +894,14 @@ export class VideoContext {
             for (let i = 0; i < this._sourceNodes.length; i++) {
                 let sourceNode = this._sourceNodes[i];
 
-                if (this._state === VideoContext.STATE.STALLED) {
+                if (this._state === STATE.STALLED) {
                     if (sourceNode._isReady() && sourceNode._state === SOURCENODESTATE.playing)
                         sourceNode._pause();
                 }
-                if (this._state === VideoContext.STATE.PAUSED) {
+                if (this._state === STATE.PAUSED) {
                     sourceNode._pause();
                 }
-                if (this._state === VideoContext.STATE.PLAYING) {
+                if (this._state === STATE.PLAYING) {
                     sourceNode._play();
                 }
                 sourceNode._update(this._currentTime);
@@ -915,14 +913,11 @@ export class VideoContext {
                 }
             }
 
-            if (
-                sourcesPlaying !== this._sourcesPlaying &&
-                this._state === VideoContext.STATE.PLAYING
-            ) {
+            if (sourcesPlaying !== this._sourcesPlaying && this._state === STATE.PLAYING) {
                 if (sourcesPlaying === true) {
-                    this._callCallbacks(VideoContext.EVENTS.CONTENT);
+                    this._callCallbacks(EVENTS.CONTENT);
                 } else {
-                    this._callCallbacks(VideoContext.EVENTS.NOCONTENT);
+                    this._callCallbacks(EVENTS.NOCONTENT);
                 }
                 this._sourcesPlaying = sourcesPlaying;
             }
@@ -982,12 +977,10 @@ export class VideoContext {
         this._processingNodes = [];
         this._timeline = [];
         this._currentTime = 0;
-        this._state = VideoContext.STATE.PAUSED;
+        this._state = STATE.PAUSED;
         this._playbackRate = 1.0;
         this._sourcesPlaying = undefined;
-        Object.keys(VideoContext.EVENTS).forEach(name =>
-            this._callbacks.set(VideoContext.EVENTS[name], [])
-        );
+        Object.keys(EVENTS).forEach(name => this._callbacks.set(EVENTS[name], []));
         this._timelineCallbacks = [];
     }
 

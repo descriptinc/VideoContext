@@ -1,10 +1,10 @@
 {
-    "name": "videocontext",
-    "version": "0.53.1",
+    "name": "@descript/videocontext",
+    "version": "1.0.0-alpha.1",
     "description": "A WebGL & HTML5 graph based video composition library",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/bbc/VideoContext.git"
+        "url": "git+https://github.com/descriptinc/VideoContext.git"
     },
     "license": "Apache-2.0",
     "main": "dist/videocontext.js",
@@ -22,6 +22,10 @@
         {
             "name": "Matthew Shotton",
             "email": "matthew.shotton@bbc.co.uk"
+        },
+        {
+            "name": "Marcello Bastea-Forte",
+            "email": "marcello@descript.com"
         }
     ],
     "scripts": {

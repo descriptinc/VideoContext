@@ -20,6 +20,10 @@ export class SourceNode extends GraphNode {
      */
     constructor(src, gl, renderGraph, currentTime) {
         super(gl, renderGraph, [], true);
+        /**
+         * @type {HTMLMediaElement | undefined}
+         * @private
+         */
         this._element = undefined;
         this._elementURL = undefined;
         this._isResponsibleForElementLifeCycle = true;
